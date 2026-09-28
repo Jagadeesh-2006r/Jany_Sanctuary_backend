@@ -21,8 +21,9 @@ router.get('/health', (req, res) => {
   });
 });
 
-// Save Jany's 3 answers
+// Save Jany's 3 answers / messages
 router.post('/save-response', saveResponse);
+router.post('/messages', saveResponse);
 
 // Log mood and receive comforting fatherly message
 router.post('/log-mood', logMood);

@@ -18,20 +18,24 @@ const DEFAULT_COMFORT_MESSAGE = 'Appa eppovum un koodave irukken da chellam. Lov
  */
 export const saveResponse = async (req, res) => {
   try {
-    const { daughterName, q1_feeling, q2_miss_memory, q3_message_to_appa } = req.body;
+    const { daughterName, q1_feeling, q2_miss_memory, q3_message_to_appa, message, text, content } = req.body || {};
 
-    if (!q1_feeling || !q2_miss_memory || !q3_message_to_appa) {
+    const feeling = q1_feeling || 'Shared feeling';
+    const memory = q2_miss_memory || 'Direct memory';
+    const finalMessage = q3_message_to_appa || message || text || content;
+
+    if (!finalMessage && !q1_feeling) {
       return res.status(400).json({
         success: false,
-        message: 'Please answer all three questions for Appa.',
+        message: 'Please answer the questions or provide a message for Appa.',
       });
     }
 
     const newResponse = new DaughterResponse({
       daughterName: daughterName || 'Jaganya J (Jany)',
-      q1_feeling,
-      q2_miss_memory,
-      q3_message_to_appa,
+      q1_feeling: feeling,
+      q2_miss_memory: memory,
+      q3_message_to_appa: finalMessage || '❤️',
     });
 
     const savedResponse = await newResponse.save();
